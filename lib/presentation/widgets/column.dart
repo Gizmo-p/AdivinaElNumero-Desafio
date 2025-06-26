@@ -6,11 +6,13 @@ class GameColumn extends StatelessWidget {
     required this.title,
     required this.numbers,
     this.correctNumbers = const [],
+    this.numbersStatus = const [],
     this.showColors = false,
   });
   final String title;
   final List<String> numbers;
   final List<String> correctNumbers;
+  final List<bool> numbersStatus;
   final bool showColors;
 
   @override
@@ -29,12 +31,19 @@ class GameColumn extends StatelessWidget {
               itemCount: numbers.length,
               itemBuilder: (BuildContext context, int index) {
                 final number = numbers[index];
-                final isCorrect = correctNumbers.contains(number);
 
                 Color textColor;
 
+                // Determine the text color based on the status or correctness on each game session
                 if (showColors) {
-                  textColor = isCorrect ? Colors.green : Colors.red;
+                  if (numbersStatus.isNotEmpty &&
+                      index < numbersStatus.length) {
+                    textColor =
+                        numbersStatus[index] ? Colors.green : Colors.red;
+                  } else {
+                    final isCorrect = correctNumbers.contains(number);
+                    textColor = isCorrect ? Colors.green : Colors.red;
+                  }
                 } else {
                   textColor = Colors.grey;
                 }

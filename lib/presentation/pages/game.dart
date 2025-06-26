@@ -58,6 +58,8 @@ class _GameState extends State<Game> {
           children: [
             //Numbers input and attempts
             InputNumber(
+              minRange: _gameState?.difficulty.minNumber ?? 0,
+              maxRange: _gameState?.difficulty.maxNumber ?? 100,
               attemptsRemaining: _gameState!.attemptsRemaining,
               onGuessSubmitted: _handleGuess,
             ),

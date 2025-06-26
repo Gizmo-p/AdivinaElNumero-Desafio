@@ -35,10 +35,7 @@ class ColumnsSection extends StatelessWidget {
             title: 'Historial',
             numbers:
                 gameState.historialNumbers.map((n) => n.toString()).toList(),
-            correctNumbers:
-                gameState.historialCorrectNumbers
-                    .map((n) => n.toString())
-                    .toList(),
+            numbersStatus: gameState.historialNumbersStatus,
             showColors: true,
           ),
         ),

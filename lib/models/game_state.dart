@@ -90,6 +90,36 @@ class GameState {
     return result;
   }
 
+  /// returns a list of booleans indicating if each number in historialNumbers was correct
+  List<bool> get historialNumbersStatus {
+    List<bool> result = [];
+    List<Guess> currentSession = [];
+
+    for (final guess in globalHistory) {
+      currentSession.add(guess);
+
+      if (guess.result == GuessResult.correcto) {
+        // if the guess is correct, mark as true
+        result.add(true);
+        currentSession.clear();
+      } else {
+        final maxAttempts = guess.difficulty.maxAttempts;
+        if (currentSession.length >= maxAttempts) {
+          // if max attempts reached, mark as false
+          result.add(false);
+          currentSession.clear();
+        }
+      }
+    }
+    // if there are remaining guesses in the current session, mark as false
+    if (currentSession.isNotEmpty &&
+        currentSession.length >= difficulty.maxAttempts) {
+      result.add(false);
+    }
+
+    return result;
+  }
+
   /// ==== GAME STATE METHODS ====
 
   // adds a new guess to the game state

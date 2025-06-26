@@ -7,10 +7,14 @@ class InputNumber extends StatefulWidget {
     super.key,
     required this.attemptsRemaining,
     this.onGuessSubmitted,
+    required this.minRange,
+    required this.maxRange,
   });
 
   final int attemptsRemaining;
   final ValueChanged<int>? onGuessSubmitted;
+  final int minRange;
+  final int maxRange;
 
   @override
   State<InputNumber> createState() => _InputNumberState();
@@ -22,7 +26,10 @@ class _InputNumberState extends State<InputNumber> {
   @override
   void initState() {
     super.initState();
-    _controller = GameInputController();
+    _controller = GameInputController(
+      minRange: widget.minRange,
+      maxRange: widget.maxRange,
+    );
   }
 
   @override
@@ -33,11 +40,26 @@ class _InputNumberState extends State<InputNumber> {
 
   void _handleSubmit() {
     final input = _controller.textController.text;
+    if (input.trim().isEmpty) {
+      _controller.setError('Por favor ingresa un número');
+      setState(() {});
+      return;
+    }
+
     final number = _controller.processSubmission(input);
+
     if (number != null) {
       widget.onGuessSubmitted?.call(number);
     }
+
     setState(() {});
+  }
+
+  void _onTextChanged(String value) {
+    if (_controller.errorMessage != null) {
+      _controller.clearError();
+      setState(() {});
+    }
   }
 
   @override
@@ -45,19 +67,42 @@ class _InputNumberState extends State<InputNumber> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 150,
-          height: 40,
-          child: TextField(
-            controller: _controller.textController,
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Numbers',
+        Column(
+          children: [
+            SizedBox(
+              width: 150,
+              height: 40,
+              child: TextField(
+                controller: _controller.textController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
+                ],
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color:
+                          _controller.errorMessage != null
+                              ? Colors.red
+                              : Colors.grey,
+                    ),
+                  ),
+                  hintText: 'Numbers',
+                ),
+                onChanged: _onTextChanged,
+                onSubmitted: (_) => _handleSubmit(),
+              ),
             ),
-            onSubmitted: (_) => _handleSubmit(),
-          ),
+            if (_controller.errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  _controller.errorMessage!,
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
+          ],
         ),
         SizedBox(width: 40),
         Column(
