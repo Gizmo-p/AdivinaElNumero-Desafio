@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guess_the_number_fluttter/presentation/pages/game.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,10 +9,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'Adivina el número',
+      theme: ThemeData.dark(),
       home: Scaffold(
-        appBar: AppBar(title: const Text('Material App Bar')),
-        body: const Center(child: Text('Adivina el número')),
+        appBar: AppBar(
+          title: const Text(
+            'Adivina el Número',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          // Button without any action according to the example video
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
+        ),
+        body: Game(),
       ),
     );
   }
