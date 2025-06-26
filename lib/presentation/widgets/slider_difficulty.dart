@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:guess_the_number_fluttter/models/difficulty.dart';
 
-class SliderDifficulty extends StatefulWidget {
-  const SliderDifficulty({super.key});
+class SliderDifficulty extends StatelessWidget {
+  const SliderDifficulty({
+    super.key,
+    required this.currentDifficulty,
+    required this.onDifficultyChanged,
+  });
 
-  @override
-  State<SliderDifficulty> createState() => _SliderDifficultyState();
-}
+  final Difficulty currentDifficulty;
+  final ValueChanged<Difficulty> onDifficultyChanged;
 
-class _SliderDifficultyState extends State<SliderDifficulty> {
-  // dummy list of difficulties would be replaced with actual data
-  final List<String> difficulties = ['Facil', 'Medio', 'Avanzado', 'Extremo'];
-  double sliderValue = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          Text(difficulties[sliderValue.toInt()]),
+          Text(currentDifficulty.name),
           SizedBox(height: 10),
           Slider(
-            value: sliderValue,
+            value:
+                Difficulty.allDifficulties
+                    .indexOf(currentDifficulty)
+                    .toDouble(),
             onChanged: (value) {
-              setState(() {
-                sliderValue = value;
-              });
+              onDifficultyChanged(Difficulty.fromIndex(value.round()));
             },
             min: 0,
-            max: (difficulties.length - 1).toDouble(),
-            divisions: 3,
+            max: (Difficulty.allDifficulties.length - 1).toDouble(),
+            divisions: Difficulty.allDifficulties.length - 1,
           ),
         ],
       ),

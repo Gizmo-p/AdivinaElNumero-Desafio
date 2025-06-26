@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guess_the_number_fluttter/models/difficulty.dart';
 import 'package:guess_the_number_fluttter/presentation/widgets/columns_section.dart';
 import 'package:guess_the_number_fluttter/presentation/widgets/input_number.dart';
 import 'package:guess_the_number_fluttter/presentation/widgets/slider_difficulty.dart';
@@ -11,6 +12,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  Difficulty currentDifficulty = Difficulty.facil;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,14 @@ class _GameState extends State<Game> {
             //Columns section with three columns
             ColumnsSection(),
             SizedBox(height: 40),
-            SliderDifficulty(),
+            SliderDifficulty(
+              currentDifficulty: currentDifficulty,
+              onDifficultyChanged: (newDifficulty) {
+                setState(() {
+                  currentDifficulty = newDifficulty;
+                });
+              },
+            ),
           ],
         ),
       ),
