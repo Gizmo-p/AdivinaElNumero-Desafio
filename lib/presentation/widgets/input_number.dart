@@ -32,6 +32,18 @@ class _InputNumberState extends State<InputNumber> {
     );
   }
 
+  // Ensure the controller updates its range when the widget is updated
+  // This is useful if the minRange or maxRange changes during the game
+  @override
+  void didUpdateWidget(InputNumber oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.minRange != widget.minRange ||
+        oldWidget.maxRange != widget.maxRange) {
+      _controller.updateRange(widget.minRange, widget.maxRange);
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();

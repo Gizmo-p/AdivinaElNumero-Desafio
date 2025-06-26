@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class GameInputController {
   final TextEditingController _textController = TextEditingController();
   String? _errorMessage;
-  final int minRange;
-  final int maxRange;
+  int minRange;
+  int maxRange;
   GameInputController({this.minRange = 1, this.maxRange = 100});
 
   TextEditingController get textController => _textController;
@@ -65,5 +65,11 @@ class GameInputController {
 
   void clearError() {
     _errorMessage = null;
+  }
+
+  /// Updates the range values for validation
+  void updateRange(int newMinRange, int newMaxRange) {
+    minRange = newMinRange;
+    maxRange = newMaxRange;
   }
 }
